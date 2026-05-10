@@ -655,6 +655,25 @@ cursor:pointer;
 
 let data = {};
 
+fetch('./channels.json')
+.then(res => res.json())
+.then(json => {
+
+data = json;
+
+renderCountries();
+
+updateStats();
+
+toast('channels.json Auto Loaded');
+
+})
+.catch(err => {
+
+console.log('channels.json not found');
+
+});
+
 let favorites =
 JSON.parse(localStorage.getItem('favorites')) || [];
 
