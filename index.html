@@ -778,3 +778,81 @@ item.innerText.toLowerCase()
 </body>
 </html>
 
+
+<script>
+
+/* RIGHT CLICK BLOCK */
+
+document.addEventListener('contextmenu',e=>{
+e.preventDefault();
+});
+
+/* DEVTOOLS BLOCK */
+
+setInterval(()=>{
+
+const devtools =
+window.outerWidth - window.innerWidth > 160 ||
+window.outerHeight - window.innerHeight > 160;
+
+if(devtools){
+
+document.body.innerHTML='';
+
+document.body.style.background='#000';
+
+}
+
+},1000);
+
+/* KEY BLOCK */
+
+document.addEventListener('keydown',e=>{
+
+if(
+e.key === 'F12' ||
+(e.ctrlKey && e.shiftKey && e.key === 'I') ||
+(e.ctrlKey && e.shiftKey && e.key === 'J') ||
+(e.ctrlKey && e.key === 'U') ||
+(e.ctrlKey && e.key === 'S')
+){
+
+e.preventDefault();
+
+}
+
+});
+
+/* DOMAIN LOCK */
+
+const allowedDomains = [
+'jaytailor9395.github.io',
+'localhost'
+];
+
+if(
+!allowedDomains.includes(
+window.location.hostname
+)
+){
+
+document.body.innerHTML='ACCESS DENIED';
+
+}
+
+/* URL ENCODE */
+
+function encodeURL(url){
+
+return btoa(url);
+
+}
+
+function decodeURL(url){
+
+return atob(url);
+
+}
+
+</script>
+
