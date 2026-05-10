@@ -482,9 +482,20 @@ fetch('./channels.json?v=' + Date.now())
 
 IPTV_DATA = json;
 
+
 renderCountries();
 
 updateStats();
+
+const firstCountry =
+Object.keys(IPTV_DATA)[0];
+
+if(firstCountry){
+
+renderChannels(firstCountry);
+
+}
+
 
 })
 
@@ -511,9 +522,20 @@ reader.onload = ev=>{
 IPTV_DATA =
 JSON.parse(ev.target.result);
 
+
 renderCountries();
 
 updateStats();
+
+const firstCountry =
+Object.keys(IPTV_DATA)[0];
+
+if(firstCountry){
+
+renderChannels(firstCountry);
+
+}
+
 
 };
 
@@ -590,8 +612,19 @@ country.toUpperCase();
 
 channels.innerHTML='';
 
+
+const firstChannel =
+IPTV_DATA[country][0];
+
+if(firstChannel){
+
+playVideo(firstChannel.url);
+
+}
+
 IPTV_DATA[country]
 .forEach(ch=>{
+
 
 const card =
 document.createElement('div');
@@ -638,13 +671,68 @@ channels.appendChild(card);
 
 /* PLAY */
 
+
 function playVideo(url){
 
-if(hls){
+const video =
+document.getElementById('video');
 
-hls.destroy();
+video.pause();
+
+video.removeAttribute('src');
+
+video.load();
+
+if(window.hls){
+
+window.hls.destroy();
+
+window.hls = null;
 
 }
+
+if(Hls.isSupported()){
+
+window.hls = new Hls({
+enableWorker:true,
+lowLatencyMode:true,
+backBufferLength:90
+});
+
+window.hls.loadSource(url);
+
+window.hls.attachMedia(video);
+
+window.hls.on(Hls.Events.MANIFEST_PARSED,function(){
+
+video.play().catch(()=>{});
+
+});
+
+window.hls.on(Hls.Events.ERROR,function(event,data){
+
+console.log(data);
+
+});
+
+}else if(video.canPlayType('application/vnd.apple.mpegurl')){
+
+video.src = url;
+
+video.addEventListener('loadedmetadata',function(){
+
+video.play().catch(()=>{});
+
+});
+
+}else{
+
+alert('Streaming not supported');
+
+}
+
+}
+
 
 if(Hls.isSupported()){
 
@@ -689,3 +777,4 @@ item.innerText.toLowerCase()
 
 </body>
 </html>
+
